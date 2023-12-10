@@ -2,15 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_LAPTOPS 100
+#define MAX_LAPTOPS 100 // Maximum number of laptops
 
+// Structure representing a laptop
 struct laptop {
-    char model[50];
-    int manufacturingYear;
-    int CPU;
-    int RAM;
+    char model[50]; // Model name of the laptop
+    int manufacturingYear; // Manufacturing year of the laptop
+    int CPU; // CPU speed of the laptop in MHz
+    int RAM; // RAM capacity of the laptop in GB
 };
 
+/**
+ * @brief Function to save laptops' details to a text file
+ * 
+ * @param file Pointer to the binary file containing laptop details
+ * @param filename Name of the output text file to save laptop details
+ */
 void saveLaptopsToFile(FILE *file, const char *filename) {
     FILE *outputFile = fopen(filename, "w");
     if (outputFile == NULL) {
@@ -32,9 +39,12 @@ void saveLaptopsToFile(FILE *file, const char *filename) {
     fclose(outputFile);
 }
 
-// Function to add a new laptop
+/**
+ * @brief Function to add a new laptop to the binary file
+ * 
+ * @param file Pointer to the binary file to add the new laptop
+ */
 void addLaptop(FILE *file) {
-    // Code to input details of a new laptop and write it to the binary file
     struct laptop newLaptop;
 
     printf("Enter laptop model: ");
@@ -52,7 +62,11 @@ void addLaptop(FILE *file) {
     fwrite(&newLaptop, sizeof(struct laptop), 1, file);
 }
 
-// Function to display all laptops
+/**
+ * @brief Function to display all laptops' details from the binary file
+ * 
+ * @param file Pointer to the binary file containing laptop details
+ */
 void displayLaptops(FILE *file) {
     struct laptop currentLaptop;
     int index = 1;
@@ -64,12 +78,16 @@ void displayLaptops(FILE *file) {
         printf("%d. %s | %d | %d Hz | %d GB\n", index, currentLaptop.model, currentLaptop.manufacturingYear, currentLaptop.CPU, currentLaptop.RAM);
         index++;
     }
-  // After displaying, save the laptops to the output text file
+
     saveLaptopsToFile(file, "laptops_output.txt");
 }
-// Function to check the quality of laptops
+
+/**
+ * @brief Function to check the quality of laptops based on certain criteria
+ * 
+ * @param file Pointer to the binary file containing laptop details
+ */
 void checkQuality(FILE *file) {
-  // Code to check and display the quality assessment of each laptop
     struct laptop currentLaptop;
 
     rewind(file);
@@ -87,9 +105,14 @@ void checkQuality(FILE *file) {
         }
     }
 }
-// Function to delete a laptop
+
+/**
+ * @brief Function to delete a specific laptop from the binary file
+ * 
+ * @param file Pointer to the binary file to delete the laptop from
+ * @param laptopNumber Number of the laptop to be deleted
+ */
 void deleteLaptop(FILE *file, int laptopNumber) {
-   // Code to delete a laptop from the binary file
     FILE *tempFile;
     struct laptop currentLaptop;
     int count = 0;
@@ -136,9 +159,13 @@ void deleteLaptop(FILE *file, int laptopNumber) {
         exit(1);
     }
 }
-// The main function where the program execution begins
+
+/**
+ * @brief Main function where the program execution begins
+ * 
+ * @return int Exit status of the program
+ */
 int main() {
-  // Open or create a binary file for laptops
     FILE *laptopFile;
     laptopFile = fopen("laptops.txt", "ab+");
     if (laptopFile == NULL) {
@@ -148,44 +175,42 @@ int main() {
 
     int choice;
     do {
-      // Display menu options for the user
         printf("\nQuality Control System for Laptop Manufacturing!\n");
         printf("1. Add a new laptop\n");
         printf("2. Display all laptops available\n");
         printf("3. Check laptop quality\n");
         printf("4. Delete a laptop\n");
-        printf("5. Save laptops to file\n"); 
-        printf("6. Exit\n"); 
+        printf("5. Save laptops to file\n");
+        printf("6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        // Switch case to perform actions based on user choice
+
         switch (choice) {
             case 1:
-                addLaptop(laptopFile); // Add a new laptop
+                addLaptop(laptopFile);
                 break;
             case 2:
-                displayLaptops(laptopFile); // Display all laptops
+                displayLaptops(laptopFile);
                 break;
             case 3:
-                checkQuality(laptopFile); // Check laptop quality
+                checkQuality(laptopFile);
                 break;
             case 4:
-                // Display laptops and then prompt to delete a specific laptop
                 displayLaptops(laptopFile);
                 int laptopToDelete;
                 printf("Enter the number of the laptop to delete: ");
                 scanf("%d", &laptopToDelete);
-                deleteLaptop(laptopFile, laptopToDelete); // Delete a laptop
+                deleteLaptop(laptopFile, laptopToDelete);
                 break;
             case 5:
-                saveLaptopsToFile(laptopFile, "laptops_output.txt");  // Save laptops to a text file
+                saveLaptopsToFile(laptopFile, "laptops_output.txt");
                 printf("Laptops saved to file!\n");
                 break;
             case 6:
-                printf("Exiting...\n"); // Exit the program
+                printf("Exiting...\n");
                 break;
             default:
-                printf("Invalid choice, try again!\n"); // Display for an invalid choice
+                printf("Invalid choice, try again!\n");
         }
     } while (choice != 6);
 
